@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     private String nickname;
     private String profileImage;
