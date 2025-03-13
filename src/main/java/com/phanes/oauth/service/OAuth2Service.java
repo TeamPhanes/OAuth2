@@ -51,7 +51,7 @@ public class OAuth2Service {
         stateRepository.save(OAuthState.builder().state(state).build());
     }
 
-    public String findNaverState(String state) {
+    public String findState(String state) {
         return stateRepository.findByState(state).getState();
     }
 

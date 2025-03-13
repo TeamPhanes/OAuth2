@@ -18,13 +18,13 @@ public class OAuth2Controller {
     private final OAuth2Service oauth2Service;
 
     @PostMapping("/state")
-    public void saveNaverState(@RequestBody String state) {
+    public void state(@RequestBody String state) {
         oauth2Service.saveState(state);
     }
 
     @GetMapping("/{socialType}/callback")
     public void socialLoginCallback(@RequestParam("code") String code, @RequestParam("state") String state, @PathVariable("socialType") String socialType) {
-        String savedState = oauth2Service.findNaverState(state);
+        String savedState = oauth2Service.findState(state);
         if (!savedState.equals(state)) {
             throw new StateNotFoundException("did not found state");
         }
