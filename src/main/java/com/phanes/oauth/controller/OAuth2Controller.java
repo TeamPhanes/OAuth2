@@ -34,7 +34,6 @@ public class OAuth2Controller {
         SocialType socialTypeEnum = SocialType.valueOf(socialType.toUpperCase(Locale.KOREA));
 
         String authUrl = oauth2Service.getProviderUrl(socialTypeEnum, state);
-        log.info("url = {}", authUrl);
         response.sendRedirect(authUrl);
     }
 
