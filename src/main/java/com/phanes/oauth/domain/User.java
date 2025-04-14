@@ -22,4 +22,5 @@ public class User {
     private String socialId;
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
+    private String refreshToken;
 }
