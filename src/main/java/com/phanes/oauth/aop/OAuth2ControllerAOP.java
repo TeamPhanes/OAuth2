@@ -12,10 +12,10 @@ import java.util.Locale;
 @Component
 public class OAuth2ControllerAOP {
 
-    @Around("execution(* com.phanes.oauth.controller.OAuth2Controller.socialLoginCallback(..))")
+    @Around("execution(* com.phanes.oauth.controller.OAuth2Controller.*(..))")
     public Object validateSocialType(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
-        String socialType = (String) args[2];
+        String socialType = (String) args[0];
 
         try {
             Enum.valueOf(SocialType.class, socialType.toUpperCase(Locale.KOREA));
