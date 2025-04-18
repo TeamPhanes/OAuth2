@@ -1,11 +1,12 @@
 package com.phanes.oauth.security;
 
+import com.phanes.oauth.config.properties.JwtProperties;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.jackson.io.JacksonDeserializer;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -13,17 +14,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Component
+@RequiredArgsConstructor
 public class JwtProvider {
 
-    @Value("${jwt.secret}")
-    private String secret;
-    @Value("${jwt.access-token.expire_time}")
-    private long accessTokenValidity;
+    private final JwtProperties jwtProperties;
     private SecretKey secretKey;
 
     @PostConstruct
     public void initKey() {
-        this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        this.secretKey = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8));
     }
 
     // AccessToken 생성
@@ -31,7 +30,7 @@ public class JwtProvider {
         return Jwts.builder()
                 .subject(String.valueOf(userId))
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + accessTokenValidity))
+                .expiration(new Date(System.currentTimeMillis() + jwtProperties.getAccessToken().getExpireTime().toMillis()))
                 .signWith(secretKey)
                 .compact();
     }

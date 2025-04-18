@@ -1,15 +1,16 @@
 package com.phanes.oauth.controller;
 
+import com.phanes.oauth.config.properties.DomainProperties;
 import com.phanes.oauth.domain.enums.SocialType;
+import com.phanes.oauth.dto.SecurityToken;
 import com.phanes.oauth.exception.StateNotFoundException;
 import com.phanes.oauth.service.OAuth2Service;
-import com.phanes.oauth.dto.SecurityToken;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -25,8 +26,7 @@ public class OAuth2Controller {
 
     private final OAuth2Service oauth2Service;
     private final RedisTemplate<String, Boolean> redisTemplate;
-    @Value("${frontend.url}")
-    private String frontendUrl;
+    private final DomainProperties domainProperties;
 
     @GetMapping("/{socialType}")
     public void socialLoginToProvider(@PathVariable("socialType") String socialType, HttpServletResponse response) throws IOException {
@@ -51,8 +51,16 @@ public class OAuth2Controller {
         SecurityToken token = oauth2Service.login(code, state, socialTypeEnum);
 
 
-        response.addHeader("Authorization", "Bearer " + token.getAccessToken());
-        response.addCookie(new Cookie("token", token.getAccessToken()));
-        response.sendRedirect(frontendUrl);
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", token.getRefreshToken())
+                .httpOnly(true)
+                .secure(true)
+                .domain(domainProperties.getCookie())
+                .sameSite("None")
+                .path("/")
+                .maxAge(Duration.ofDays(7))
+                .build();
+        response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token.getAccessToken());
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+        response.sendRedirect(domainProperties.getFrontend());
     }
 }
