@@ -3,6 +3,8 @@ package com.phanes.oauth.controller;
 import com.phanes.oauth.domain.enums.SocialType;
 import com.phanes.oauth.exception.StateNotFoundException;
 import com.phanes.oauth.service.OAuth2Service;
+import com.phanes.oauth.dto.SecurityToken;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,8 +48,11 @@ public class OAuth2Controller {
         redisTemplate.delete(state);
 
         SocialType socialTypeEnum = SocialType.valueOf(socialType.toUpperCase(Locale.KOREA));
-        String token = oauth2Service.login(code, state, socialTypeEnum);
+        SecurityToken token = oauth2Service.login(code, state, socialTypeEnum);
 
+
+        response.addHeader("Authorization", "Bearer " + token.getAccessToken());
+        response.addCookie(new Cookie("token", token.getAccessToken()));
         response.sendRedirect(frontendUrl);
     }
 }

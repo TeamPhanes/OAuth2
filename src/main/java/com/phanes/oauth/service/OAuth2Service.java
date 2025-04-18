@@ -3,6 +3,7 @@ package com.phanes.oauth.service;
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import com.phanes.oauth.domain.User;
 import com.phanes.oauth.domain.enums.SocialType;
+import com.phanes.oauth.dto.SecurityToken;
 import com.phanes.oauth.vo.SocialProfile;
 import com.phanes.oauth.repository.UserRepository;
 import com.phanes.oauth.security.JwtProvider;
@@ -41,7 +42,7 @@ public class OAuth2Service {
         return strategy.getSocialUrl(state);
     }
 
-    public String login(String code, String state, SocialType socialType) {
+    public SecurityToken login(String code, String state, SocialType socialType) {
         SocialLoginStrategy strategy = strategyMap.get(socialType);
         SocialProfile profile = strategy.getProfile(code, state);
         Optional<User> savedUser = userRepository.findBySocialIdAndSocialType(profile.getSocialId(), socialType);
@@ -51,9 +52,12 @@ public class OAuth2Service {
                 .profileImage(profile.getProfileImage())
                 .socialType(socialType)
                 .build()));
-        refreshTokenService.createRefreshToken(user.getId());
-        String token = jwtProvider.generateAccessToken(user.getId());
-        redisTemplate.opsForValue().set(token, user.getId());
-        return token;
+        String refreshToken = refreshTokenService.createRefreshToken(user.getId());
+        String accessToken = jwtProvider.generateAccessToken(user.getId());
+        redisTemplate.opsForValue().set(accessToken, user.getId());
+        return SecurityToken.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 }
