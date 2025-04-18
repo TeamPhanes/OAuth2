@@ -3,7 +3,6 @@ package com.phanes.oauth.controller;
 import com.phanes.oauth.domain.enums.SocialType;
 import com.phanes.oauth.exception.StateNotFoundException;
 import com.phanes.oauth.service.OAuth2Service;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,17 +46,7 @@ public class OAuth2Controller {
         redisTemplate.delete(state);
 
         SocialType socialTypeEnum = SocialType.valueOf(socialType.toUpperCase(Locale.KOREA));
-        String accessToken = switch (socialTypeEnum) {
-            case NAVER -> oauth2Service.loginIntoNaver(code, state, socialTypeEnum);
-            case GOOGLE -> oauth2Service.loginIntoGoogle(code, socialTypeEnum);
-            case KAKAO -> oauth2Service.loginIntoKakao(code, socialTypeEnum);
-        };
-        Cookie accessTokenCookie = new Cookie("access_token", accessToken);
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setSecure(true);
-        accessTokenCookie.setPath("/");
-        accessTokenCookie.setMaxAge(30 * 60);
-        response.addCookie(accessTokenCookie);
+        String token = oauth2Service.login(code, state, socialTypeEnum);
 
         response.sendRedirect(frontendUrl);
     }

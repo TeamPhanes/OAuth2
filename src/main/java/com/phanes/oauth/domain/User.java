@@ -15,12 +15,11 @@ import lombok.NoArgsConstructor;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String nickname;
     private String profileImage;
     private String socialId;
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
-    private String refreshToken;
 }
