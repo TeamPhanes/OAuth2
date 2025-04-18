@@ -1,5 +1,5 @@
 creation_rules:
   - pgp: "B57822CEBBF7C27C196DB7D3D9DF0BD2C91CBE98"
-    encrypted_regex: ^(url|username|password|id|secret|uri)$
+    encrypted_regex: ^(url|username|password|id|secret|uri|key.+|host)$
     paths:
       - "application*.yaml"
