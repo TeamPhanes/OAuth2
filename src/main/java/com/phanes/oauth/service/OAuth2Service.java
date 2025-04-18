@@ -11,7 +11,6 @@ import com.phanes.oauth.strategy.SocialLoginStrategy;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +29,6 @@ public class OAuth2Service {
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
-    private final RedisTemplate<String, Long> redisTemplate;
 
     @PostConstruct
     public void init() {
@@ -54,7 +52,6 @@ public class OAuth2Service {
                 .build()));
         String refreshToken = refreshTokenService.createRefreshToken(user.getId());
         String accessToken = jwtProvider.generateAccessToken(user.getId());
-        redisTemplate.opsForValue().set(accessToken, user.getId());
         return SecurityToken.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
