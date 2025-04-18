@@ -5,7 +5,7 @@ import com.phanes.oauth.client.GoogleTokenClient;
 import com.phanes.oauth.domain.enums.SocialType;
 import com.phanes.oauth.dto.GoogleProfileResponse;
 import com.phanes.oauth.dto.GoogleTokenResponse;
-import com.phanes.oauth.vo.SocialProfile;
+import com.phanes.oauth.dto.SocialProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

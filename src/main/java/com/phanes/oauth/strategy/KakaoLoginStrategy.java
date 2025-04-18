@@ -5,7 +5,7 @@ import com.phanes.oauth.client.KakaoTokenClient;
 import com.phanes.oauth.domain.enums.SocialType;
 import com.phanes.oauth.dto.KakaoProfileResponse;
 import com.phanes.oauth.dto.KakaoTokenResponse;
-import com.phanes.oauth.vo.SocialProfile;
+import com.phanes.oauth.dto.SocialProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

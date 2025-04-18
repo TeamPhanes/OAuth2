@@ -1,4 +1,4 @@
-package com.phanes.oauth.vo;
+package com.phanes.oauth.dto;
 
 import com.phanes.oauth.domain.enums.SocialType;
 import lombok.AllArgsConstructor;

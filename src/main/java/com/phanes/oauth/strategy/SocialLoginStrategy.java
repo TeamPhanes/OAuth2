@@ -1,7 +1,7 @@
 package com.phanes.oauth.strategy;
 
 import com.phanes.oauth.domain.enums.SocialType;
-import com.phanes.oauth.vo.SocialProfile;
+import com.phanes.oauth.dto.SocialProfile;
 
 public interface SocialLoginStrategy {
     String getSocialUrl(String state);
