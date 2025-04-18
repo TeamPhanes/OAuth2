@@ -19,7 +19,13 @@ public class RefreshToken {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String token;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private User user;
     private Instant expireDate;
+
+    public RefreshToken updateToken(String token, Instant expireDate) {
+        this.token = token;
+        this.expireDate = expireDate;
+        return this;
+    }
 }
