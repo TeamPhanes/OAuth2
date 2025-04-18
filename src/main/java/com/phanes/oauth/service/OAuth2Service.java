@@ -3,7 +3,7 @@ package com.phanes.oauth.service;
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils;
 import com.phanes.oauth.domain.User;
 import com.phanes.oauth.domain.enums.SocialType;
-import com.phanes.oauth.dto.SocialProfile;
+import com.phanes.oauth.vo.SocialProfile;
 import com.phanes.oauth.repository.UserRepository;
 import com.phanes.oauth.security.JwtProvider;
 import com.phanes.oauth.strategy.SocialLoginStrategy;

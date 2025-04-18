@@ -6,7 +6,7 @@ import com.phanes.oauth.domain.enums.SocialType;
 import com.phanes.oauth.dto.NaverProfile;
 import com.phanes.oauth.dto.NaverProfileResponse;
 import com.phanes.oauth.dto.NaverTokenResponse;
-import com.phanes.oauth.dto.SocialProfile;
+import com.phanes.oauth.vo.SocialProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
