@@ -8,6 +8,7 @@ import com.phanes.oauth.exception.UnAuthenticateException;
 import com.phanes.oauth.repository.RefreshTokenRepository;
 import com.phanes.oauth.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -19,6 +20,7 @@ import java.util.UUID;
 public class RefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
+    private final RedisTemplate<String, Long> redisTemplate;
     private final JwtProperties jwtProperties;
     private final JwtProvider jwtProvider;
 
@@ -41,11 +43,15 @@ public class RefreshTokenService {
             refreshTokenRepository.delete(existedToken);
             throw new TokenExpireException("Refresh token expired");
         }
-        return jwtProvider.generateAccessToken(existedToken.getId());
+        String accessToken = jwtProvider.generateAccessToken(existedToken.getId());
+        redisTemplate.opsForValue().set(accessToken, existedToken.getUser().getId());
+        return accessToken;
     }
 
     public void logout(String accessToken) {
-        RefreshToken refreshToken = refreshTokenRepository.findByUserId(jwtProvider.getUserId(accessToken)).orElseThrow(() -> new IllegalStateException("Invalid refresh token"));
+        Long userId = redisTemplate.opsForValue().get(accessToken);
+        RefreshToken refreshToken = refreshTokenRepository.findByUserId(userId).orElseThrow(() -> new IllegalStateException("Invalid refresh token"));
         refreshTokenRepository.delete(refreshToken);
+        redisTemplate.delete(accessToken);
     }
 }

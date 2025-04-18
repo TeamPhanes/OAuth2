@@ -36,14 +36,14 @@ public class JwtProvider {
     }
 
     // 토큰에서 userId 추출
-    public Long getUserId(String token) {
-        return Long.valueOf(Jwts.parser()
+    public String getUserId(String token) {
+        return Jwts.parser()
                 .verifyWith(secretKey)
                 .json(new JacksonDeserializer<>())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
-                .getSubject());
+                .getSubject();
     }
 
     // 토큰 유효성 검사
