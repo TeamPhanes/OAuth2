@@ -8,7 +8,6 @@ import java.util.Date;
 
 @Getter
 @Builder
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class KakaoProfileResponse {
