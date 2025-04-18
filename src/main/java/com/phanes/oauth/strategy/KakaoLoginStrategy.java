@@ -54,6 +54,7 @@ public class KakaoLoginStrategy implements SocialLoginStrategy {
                 .socialId(String.valueOf(profileResponse.getId()))
                 .profileImage(profile.getThumbnailImageUrl())
                 .socialType(SocialType.KAKAO)
+                .email(profileResponse.getKakao_account().getEmail())
                 .build();
     }
 }

@@ -14,4 +14,6 @@ public class SocialProfile {
     private String socialId;
     private String profileImage;
     private SocialType socialType;
+    private String gender;
+    private String email;
 }

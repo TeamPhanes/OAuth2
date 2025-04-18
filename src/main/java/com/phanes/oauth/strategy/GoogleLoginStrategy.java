@@ -56,6 +56,7 @@ public class GoogleLoginStrategy implements SocialLoginStrategy {
                 .socialId(profile.getId())
                 .profileImage(profile.getPicture())
                 .socialType(SocialType.GOOGLE)
+                .email(profile.getEmail())
                 .build();
     }
 }

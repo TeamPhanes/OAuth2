@@ -46,6 +46,7 @@ public class NaverLoginStrategy implements SocialLoginStrategy {
                 .socialId(profile.getId())
                 .profileImage(profile.getProfileImage())
                 .socialType(SocialType.NAVER)
+                .email(profile.getEmail())
                 .build();
     }
 }
