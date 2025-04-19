@@ -12,7 +12,7 @@ import java.util.Locale;
 @Component
 public class OAuth2ControllerAOP {
 
-    @Around("execution(* com.phanes.oauth.controller.OAuth2Controller.*(..))")
+    @Around("@annotation(com.phanes.oauth.annotation.ValidateSocialType)")
     public Object validateSocialType(ProceedingJoinPoint joinPoint) throws Throwable {
         Object[] args = joinPoint.getArgs();
         String socialType = (String) args[0];
