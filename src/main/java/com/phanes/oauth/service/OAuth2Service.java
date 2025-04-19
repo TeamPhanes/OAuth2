@@ -51,6 +51,10 @@ public class OAuth2Service {
                 .socialId(profile.getSocialId())
                 .profileImage(profile.getProfileImage())
                 .socialType(socialType)
+                .email(profile.getEmail())
+                .genderMark(false)
+                .emailMark(false)
+                .profileComment("")
                 .build()));
         String refreshToken = refreshTokenService.createRefreshToken(user.getId());
         String accessToken = jwtProvider.generateAccessToken(user.getId());

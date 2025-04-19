@@ -4,9 +4,11 @@ import com.phanes.oauth.annotation.ValidateSocialType;
 import com.phanes.oauth.config.properties.DomainProperties;
 import com.phanes.oauth.domain.enums.SocialType;
 import com.phanes.oauth.dto.SecurityToken;
+import com.phanes.oauth.dto.UserDTO;
 import com.phanes.oauth.exception.StateNotFoundException;
 import com.phanes.oauth.service.OAuth2Service;
 import com.phanes.oauth.service.RefreshTokenService;
+import com.phanes.oauth.service.UserService;
 import com.phanes.oauth.utils.CookieUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -30,6 +33,7 @@ public class OAuth2Controller {
 
     private final OAuth2Service oauth2Service;
     private final RefreshTokenService refreshTokenService;
+    private final UserService userService;
     private final RedisTemplate<String, Boolean> redisTemplate;
     private final DomainProperties domainProperties;
 
@@ -77,5 +81,10 @@ public class OAuth2Controller {
 
         ResponseCookie deleteCookie = CookieUtils.deleteCookie("refreshToken", domainProperties.getCookie());
         response.addHeader(HttpHeaders.SET_COOKIE, deleteCookie.toString());
+    }
+
+    @GetMapping("/me")
+    public UserDTO me(@AuthenticationPrincipal Long userId) {
+        return userService.getUser(userId);
     }
 }

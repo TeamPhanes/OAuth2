@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
@@ -26,8 +25,6 @@ public class User {
     private String socialId;
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
-    @ColumnDefault("0")
     private Boolean genderMark;
-    @ColumnDefault("0")
     private Boolean emailMark;
 }
