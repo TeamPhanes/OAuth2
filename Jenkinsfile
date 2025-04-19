@@ -6,8 +6,9 @@ pipeline {
         REGISTRY = "harbor.phanescloud.com"
     }
     stages {
-        stage('Lint & Build') {
+        stage('Build') {
             steps {
+                sh 'chmod +x gradlew'
                 sh 'make build'
             }
         }
